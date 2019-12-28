@@ -1,0 +1,26 @@
+{
+  "name": "z-crets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DementedEarplug/Z-crets.git"
+  },
+  "author": "Onix Boiii",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DementedEarplug/Z-crets/issues"
+  },
+  "homepage": "https://github.com/DementedEarplug/Z-crets#readme"
+}
