@@ -3,6 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
 const mongoose = require('mongoose')
+const encrypt = require('mongoose-encryption')
 
 // App config
 app = express()
@@ -14,10 +15,14 @@ app.set('view engine', 'ejs')
 mongoose.connect('mongodb://localhost:27017/zcretsDB', {useNewUrlParser: true, useUnifiedTopology: true})
 
 // Schema
-const userSchema = {
+const userSchema = new mongoose.Schema({
     email: String,
     password: String
-}
+})
+
+// Setup encryption
+const secret = 'SomeSuperLongSecretFoo'
+userSchema.plugin(encrypt,{secret: secret, encryptedFields: ['password']})
 
 // Model
 const User = mongoose.model('User', userSchema)
@@ -77,4 +82,9 @@ app.post("/register",(req,res)=>{
         }
     })
 
+})
+
+// LogoutRoute
+app.get("/logout", (req,res)=>{
+    res.render('home')
 })
