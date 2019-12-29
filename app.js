@@ -31,7 +31,8 @@ mongoose.connect('mongodb://localhost:27017/zcretsDB', {useNewUrlParser: true, u
 // Schema
 const userSchema = new mongoose.Schema({
     email: String,
-    password: String
+    password: String,
+    googleId: String,
 })
 
 // Add passport local mongoose plugin for password hashing/salting
