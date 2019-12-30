@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String,
     googleId: String,
+    secret: String,
 })
 
 // Add passport local mongoose plugin for password hashing/salting
@@ -61,7 +62,7 @@ passport.use(new GoogleStrategy({
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log(profile);
+    // console.log(profile);
 
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
       return cb(err, user);
@@ -129,12 +130,13 @@ app.get("/logout", (req,res)=>{
 
 // Secrets route
 app.get('/secrets',(req,res)=>{
-    // Check is user is logged in and authenticated
-    if(req.isAuthenticated()){
-        res.render('secrets')
-    } else {
-        res.redirect('/login')
-    }
+   User.find({secret: {$ne: null}},(err, foundSecrets)=>{
+       if(err){
+           console.log(err)
+       }else{
+           res.render("secrets", { secrets:foundSecrets})
+       }
+   })
 })
 
 // Oauth google route
@@ -149,3 +151,29 @@ app.get("/auth/google/secrets",
     // Successful authentication, redirect to secrets.
     res.redirect("/secrets");
   });
+
+//   Sumbit secret route
+app.get("/submit",(req,res)=>{
+    // Check is user is logged in and authenticated
+    if(req.isAuthenticated()){
+        res.render('submit')
+    } else {
+        res.redirect('/login')
+    }
+})
+
+//   Sumbit secret route
+app.post("/submit",(req,res)=>{
+    const newSecret = req.body.secret
+    console.log(req.user)
+    User.findById(req.user._id,(err, foundUser)=>{
+        if(!err){
+            foundUser.secret= newSecret
+            foundUser.save(()=>{
+                res.redirect('/secrets')
+            })
+        }else{
+            console.log(err)
+        }
+    })
+})
